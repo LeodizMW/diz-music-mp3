@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>DIZ Music Mp3</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+  <div class="max-w-6xl mx-auto p-4 sm:p-6">
+    <!-- Sticky Header Bar -->
+    <div class="sticky top-0 z-50 bg-gradient-to-r from-pink-400 to-pink-700 p-4 rounded-xl shadow-md mb-6">
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="showTab('home')" class="text-3xl sm:text-4xl font-extrabold text-white transition-transform duration-300 transform hover:scale-110 hover:rotate-1">
+          🎧 DIZ Music Mp3
+        </button>
+        <div class="flex items-center gap-2">
+          <label class="flex items-center cursor-pointer text-white">
+            <span class="mr-2 text-sm">Dark Mode</span>
+            <div class="relative">
+              <input type="checkbox" id="darkModeSwitch" class="sr-only" />
+              <div class="w-10 h-5 bg-gray-300 rounded-full shadow-inner dark:bg-gray-600"></div>
+              <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition transform dark:translate-x-5"></div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex">
+      <!-- Left Side Menu -->
+      <nav class="bg-white dark:bg-gray-800 rounded-xl shadow-md px-4 py-3 flex flex-col space-y-2 mr-6 min-w-fit">
+        <button onclick="showTab('home')" class="tab-btn text-sm sm:text-base bg-blue-500 text-white px-4 py-2 rounded-full font-medium hover:bg-blue-600 transition transform hover:scale-105">Home</button>
+        <button onclick="showTab('upload')" class="tab-btn text-sm sm:text-base bg-purple-500 text-white px-4 py-2 rounded-full font-medium hover:bg-purple-600 transition transform hover:scale-105">Upload</button>
+        <button onclick="showTab('top')" class="tab-btn text-sm sm:text-base bg-red-600 text-white px-4 py-2 rounded-full font-medium hover:bg-red-700 transition transform hover:scale-105">Top Hits</button>
+        <button onclick="showTab('player')" class="tab-btn text-sm sm:text-base bg-green-500 text-white px-4 py-2 rounded-full font-medium hover:bg-green-600 transition transform hover:scale-105">Now Playing</button>
+        <button onclick="showTab('book')" class="tab-btn text-sm sm:text-base bg-yellow-500 text-white px-4 py-2 rounded-full font-medium hover:bg-yellow-600 transition transform hover:scale-105">Book Artist</button>
+        <button onclick="showTab('lyrics')" class="tab-btn text-sm sm:text-base bg-indigo-500 text-white px-4 py-2 rounded-full font-medium hover:bg-indigo-600 transition transform hover:scale-105">Lyrics</button>
+      </nav>
+
+      <!-- Content Area -->
+      <div class="flex-1">
+        <!-- Home Tab -->
+        <div id="home" class="tab hidden">
+          <h2 class="text-2xl font-bold mb-4">🎵 Home</h2>
+          <p>Welcome to DIZ Music Mp3 - Stream, download and discover music from Malawi and beyond!</p>
+          
+          <!-- Image Gallery with Zoom Effect -->
+          <div class="flex flex-wrap justify-center gap-4 mt-8">
+            <img src="https://via.placeholder.com/300x200?text=Image+1" alt="Image 1" class="image-zoom rounded-lg shadow-lg w-80 cursor-pointer" />
+            <img src="https://via.placeholder.com/300x200?text=Image+2" alt="Image 2" class="image-zoom rounded-lg shadow-lg w-80 cursor-pointer" />
+            <img src="https://via.placeholder.com/300x200?text=Image+3" alt="Image 3" class="image-zoom rounded-lg shadow-lg w-80 cursor-pointer" />
+            <img src="https://via.placeholder.com/300x200?text=Image+4" alt="Image 4" class="image-zoom rounded-lg shadow-lg w-80 cursor-pointer" />
+          </div>
+        </div>
+
+        <!-- Upload Tab -->
+        <div id="upload" class="tab hidden">
+          <h2 class="text-2xl font-bold mb-4">📤 Upload Your Music</h2>
+          <p>Upload your MP3 file here. Only admins can upload music.</p>
+          
+          <form id="uploadForm" class="mt-6 space-y-4" enctype="multipart/form-data">
+            <!-- Upload MP3 -->
+            <div class="flex flex-col">
+              <label for="file" class="text-sm font-medium">Upload MP3 File</label>
+              <input type="file" id="file" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" accept=".mp3" required />
+            </div>
+
+            <!-- Song Title -->
+            <div class="flex flex-col">
+              <label for="title" class="text-sm font-medium">Song Title</label>
+              <input type="text" id="title" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter song title" required />
+            </div>
+
+            <!-- Artist Name -->
+            <div class="flex flex-col">
+              <label for="artist" class="text-sm font-medium">Artist Name</label>
+              <input type="text" id="artist" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter artist name" required />
+            </div>
+
+            <!-- Genre -->
+            <div class="flex flex-col">
+              <label for="genre" class="text-sm font-medium">Genre</label>
+              <input type="text" id="genre" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter genre" required />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+              <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
+                Upload Song
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Top Hits Tab -->
+        <div id="top" class="tab hidden">
+          <h2 class="text-2xl font-bold mb-4">🔥 Top Hits</h2>
+          <p>Explore the most popular and trending tracks on the platform.</p>
+        </div>
+
+        <!-- Now Playing Tab -->
+        <div id="player" class="tab hidden">
+          <h2 class="text-2xl font-bold mb-4">🎧 Now Playing</h2>
+          <div id="currentSong" class="mt-6 text-center">
+            <h3 id="songTitle" class="text-xl font-semibold">Song Title</h3>
+            <p id="songArtist" class="text-lg text-gray-600">Artist Name</p>
+            <div class="mt-4">
+              <audio id="audioPlayer" controls class="w-full max-w-xl">
+                <source id="audioSource" src="" type="audio/mp3" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+            <div class="mt-4">
+              <button id="playPauseButton" onclick="togglePlayPause()" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
+                Play
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book Artist Tab -->
+        <div id="book" class="tab hidden">
+          <h2 class="text-2xl font-bold mb-4">🎤 Book an Artist</h2>
+          <p>Fill in the details below to book your favorite artist for your event!</p>
+          
+          <form id="bookingForm" class="mt-6 space-y-4">
+            <!-- Name of the Artist -->
+            <div class="flex flex-col">
+              <label for="artistName" class="text-sm font-medium">Artist Name</label>
+              <input type="text" id="artistName" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter artist's name" required />
+            </div>
+
+            <!-- Event Date -->
+            <div class="flex flex-col">
+              <label for="eventDate" class="text-sm font-medium">Event Date</label>
+              <input type="date" id="eventDate" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" required />
+            </div>
+
+            <!-- Venue -->
+            <div class="flex flex-col">
+              <label for="venue" class="text-sm font-medium">Venue</label>
+              <input type="text" id="venue" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter event venue" required />
+            </div>
+
+            <!-- Contact Information -->
+            <div class="flex flex-col">
+              <label for="contact" class="text-sm font-medium">Your Contact Info (Phone or Email)</label>
+              <input type="text" id="contact" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Phone or Email" required />
+            </div>
+
+            <!-- Message -->
+            <div class="flex flex-col">
+              <label for="message" class="text-sm font-medium">Additional Details</label>
+              <textarea id="message" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" placeholder="Additional message (optional)" rows="4"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+              <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
+                Submit Booking Request
+              </button>
+            </div>
+          </form>
+
+          <p class="mt-4 text-sm text-gray-700">We will get in touch with you as soon as possible to confirm the booking details.</p>
+        </div>
+
+        <!-- Lyrics Tab -->
+        <div id="lyrics" class="tab hidden">
+          <h2 class="text-2xl font-bold mb-4">📝 Lyrics Finder</h2>
+          <div class="flex items-center mb-4">
+            <input type="text" id="lyricsSearchInput" placeholder="Search lyrics..." class="px-4 py-2 border rounded-l-xl focus:outline-none focus:ring focus:border-blue-300 w-80" />
+            <button onclick="searchLyrics()" class="bg-blue-500 text-white px-4 py-2 rounded-r-xl font-medium hover:bg-blue-600">Search</button>
+          </div>
+          <div id="lyricsResults" class="space-y-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-6 py-4 bg-gray-800 text-white text-center rounded-lg">
+      <p>Powered by DIZpix Studios | © 2025</p>
+      <div class="flex justify-center gap-4 mt-2">
+        <a href="https://wa.me/" class="text-white hover:text-gray-400" target="_blank">WhatsApp</a>
+        <a href="https://facebook.com/" class="text-white hover:text-gray-400" target="_blank">Facebook</a>
+        <a href="https://instagram.com/" class="text-white hover:text-gray-400" target="_blank">Instagram</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const darkModeSwitch = document.getElementById('darkModeSwitch');
+
+    // Dark Mode Toggle
+    darkModeSwitch.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Switch Tabs
+    function showTab(tabName) {
+      tabs.forEach(tab => {
+        if (tab.id === tabName) {
+          tab.classList.remove('hidden');
+        } else {
+          tab.classList.add('hidden');
+        }
+      });
+    }
+
+    // Initialize first tab
+    showTab('home');
+    
+    // Form Submission
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Get form values
+      const file = document.getElementById('file').files[0];
+      const title = document.getElementById('title').value;
+      const artist = document.getElementById('artist').value;
+      const genre = document.getElementById('genre').value;
+
+      if (!file) {
+        alert('Please upload a file');
+        return;
+      }
+
+      // Handle MP3 Upload to Supabase here (via Supabase storage API)
+      // Example: uploadFile(file);
+
+      console.log('MP3 Uploaded:', title, artist, genre);
+      alert('Song successfully uploaded!');
+    });
+
+    // Booking Form Submission
+    document.getElementById('bookingForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Get form values
+      const artistName = document.getElementById('artistName').value;
+      const eventDate = document.getElementById('eventDate').value;
+      const venue = document.getElementById('venue').value;
+      const contact = document.getElementById('contact').value;
+      const message = document.getElementById('message').value;
+
+      // Log form data
+      console.log('Booking Request Submitted:', artistName, eventDate, venue, contact, message);
+      alert('Thank you for your booking request! We will contact you shortly.');
+      
+      // Clear form
+      document.getElementById('bookingForm').reset();
+    });
+  </script>
+</body>
+</html>
